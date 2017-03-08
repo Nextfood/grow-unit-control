@@ -1,7 +1,7 @@
 #include <SoftwareSerial.h>
 #include <ArduinoJson.h>
 #include "Arduino.h"
-#include "SensorTsl2591.h"
+#include "SensorSi7021.h"
 #include "JsonBuilder.h"
 
 
@@ -17,7 +17,7 @@ String g_data = "";
 #define NUMBER_OF_DEVICES 1
 
 Device* deviceArray[NUMBER_OF_DEVICES] = {
-    new SensorTsl2591()
+    new SensorSi7021()
     // Add more devices here
 };
 

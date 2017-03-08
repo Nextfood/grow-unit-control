@@ -176,11 +176,19 @@ class Adafruit_TSL2591 : public Adafruit_Sensor
   bool getEvent  ( sensors_event_t* );
   void getSensor ( sensor_t* );
 
+  // Non-blocking functions
+  void getFullLuminosityNonBlocking(void);
+  bool isFullLuminosityReady(void);
+  uint32_t getFullLuminosityNonBlockingData(void);
+  
  private:
   tsl2591IntegrationTime_t _integration;
   tsl2591Gain_t _gain;
   int32_t _sensorID;
 
   boolean _initialized;
+  
+  unsigned long _timerFullLumNonBlocking;
+  uint32_t _resultFullLumNonBlocking;
 };
 #endif
