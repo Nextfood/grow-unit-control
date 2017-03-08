@@ -19,11 +19,14 @@ public:
         return *m_obj;
     }
 
- 
-    String serialize() {
-        String json;
+    String& serialize(String& json) {
+        json = "";
         m_obj->prettyPrintTo(json);
         return json;
+    }
+
+    void serialize(Print& json) {
+        m_obj->prettyPrintTo(json);
     }
 
 };
