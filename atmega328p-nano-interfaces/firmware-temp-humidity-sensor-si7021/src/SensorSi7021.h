@@ -22,19 +22,19 @@ public:
         return true;
     }
 
-    virtual String updateData(String& json) {
+    virtual String& updateData(String& json) {
         JsonBuilder s(json);
         JsonObject& datanode = s.get().createNestedObject("sensors").createNestedObject("si7021");
         datanode["temperature"] = m_si7021.readTemperature();
         datanode["humidity"] = m_si7021.readHumidity();
-        return s.serialize();
+        return s.serialize(json);
     }
 
-    virtual String updateInfo(String& json) {
+    virtual String& updateInfo(String& json) {
         JsonBuilder s(json);
         JsonObject& datanode = s.get().createNestedObject("sensors").createNestedObject("si7021");
         datanode["sensor"] = "Si7021";
-        return s.serialize();
+        return s.serialize(json);
     }
 
     virtual bool configure(String& json) {

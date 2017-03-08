@@ -1,5 +1,6 @@
 #include <SoftwareSerial.h>
 #include <ArduinoJson.h>
+#include <EEPROM.h>
 #include "Arduino.h"
 #include "SensorTsl2591.h"
 #include "JsonBuilder.h"
@@ -8,8 +9,9 @@
 #define BAUDRATE 57600
 #define SERIALPORT_TIMEOUT_MS 100
 
+#define SIZE_OF_ID 25
 
-String g_id;
+char g_id[SIZE_OF_ID];
 String g_info;
 String g_data;
 
@@ -38,8 +40,25 @@ static inline void returnFailure(String errorMsg) {
     result.serialize(Serial);
 }
 
+static inline void readIdFromEeprom() {
+    for (int i = 0; i < SIZE_OF_ID; ++i) { // Acquire ID from the EEPROM
+        g_id[i] = EEPROM.read(i);
+        if (g_id[i] == 0) break;
+    }
+    g_id[SIZE_OF_ID - 1] = 0;
+}
+
+static inline void writeIdToEeprom() {
+    for (int i = 0; i < SIZE_OF_ID - 1; ++i) {
+        EEPROM.write(i, g_id[i]);
+    }
+    EEPROM.write(SIZE_OF_ID - 1, 0);
+}
+
 void setId(const String& str) {
-    g_id = str;
+    str.toCharArray(g_id, SIZE_OF_ID);
+    writeIdToEeprom();
+
     {
         JsonBuilder s(g_info);
         s.get()["id"] = str;
@@ -103,7 +122,11 @@ void parseJson(String& json) {
 }
 
 void setup() {
-    g_id = F("<unknown location>");
+    readIdFromEeprom();
+
+    if (g_id[0] == 0) {
+        String(F("<unknown location>")).toCharArray(g_id, SIZE_OF_ID);
+    }
 
     {
         JsonBuilder s;
