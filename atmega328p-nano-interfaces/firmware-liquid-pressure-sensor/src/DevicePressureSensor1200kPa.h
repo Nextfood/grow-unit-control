@@ -23,29 +23,29 @@ public:
 
     virtual String& updateData(String& json) {
         JsonBuilder s(json);
-        if (!s.get().containsKey(F("device"))) {
-            s.get().createNestedObject(F("device"));
+        if (!s.get().containsKey(F("sensors"))) {
+            s.get().createNestedObject(F("sensors"));
         }
-        if (!s.get()[F("device")].as<JsonObject&>().containsKey(F("liquid_pressure"))) {
-            s.get()[F("device")].as<JsonObject&>().createNestedObject(F("liquid_pressure"));
+        if (!s.get()[F("sensors")].as<JsonObject&>().containsKey(F("liquid_pressure_sensor"))) {
+            s.get()[F("sensors")].as<JsonObject&>().createNestedObject(F("liquid_pressure_sensor"));
         }
-        JsonObject& datanode = s.get()[F("device")][F("liquid_pressure")];
+        JsonObject& datanode = s.get()[F("sensors")][F("liquid_pressure_sensor")];
 
-        datanode[F("pressure")] = getPressure();
+        datanode[F("pressure")] = double_with_n_digits(getPressure(), 2);
         datanode[F("pressure_adc")] = analogRead(m_pin);
         return s.serialize(json);
     }
 
     virtual String& updateInfo(String& json) {
         JsonBuilder s(json);
-        if (!s.get().containsKey(F("device"))) {
-            s.get().createNestedObject(F("device"));
+        if (!s.get().containsKey(F("sensors"))) {
+            s.get().createNestedObject(F("sensors"));
         }
-        if (!s.get()[F("device")].as<JsonObject&>().containsKey(F("liquid_pressure"))) {
-            s.get()[F("device")].as<JsonObject&>().createNestedObject(F("liquid_pressure"));
+        if (!s.get()[F("sensors")].as<JsonObject&>().containsKey(F("liquid_pressure_sensor"))) {
+            s.get()[F("sensors")].as<JsonObject&>().createNestedObject(F("liquid_pressure_sensor"));
         }
-        JsonObject& datanode = s.get()[F("device")][F("liquid_pressure")];
-        datanode["device"] = F("Liquid Pressure Sensor 0-1.2 MPa");
+        JsonObject& datanode = s.get()[F("sensors")][F("liquid_pressure_sensor")];
+        datanode["sensors"] = F("Liquid Pressure Sensor 0-1200 kPa");
         return s.serialize(json);
     }
 
@@ -59,15 +59,16 @@ private:
     float getPressure() {
         // ADC is referenced from 0-5V (0-1023)
         // Pressure sensor is presumably linear from 0.5-4.5V
-        // corresponding to 0-1.2 MPa.
+        // corresponding to 0-1200 kPa.
         int adc = analogRead(m_pin);
 
         if (adc < 102) {
             return 0.0;
-        } else if (adc > 921) {
-            return 1.2;
+        } else 
+            if (adc > 921) {
+            return 1200;
         } else {
-            return 0.001465201465*(float)adc - 0.149450549; // basic linear equation
+            return 1.465201465 * (float) adc - 149.450549; // basic linear equation
         }
     }
 
