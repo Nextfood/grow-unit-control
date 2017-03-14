@@ -1,0 +1,4 @@
+<launch>
+    <node pkg="client_light_sensor_tsl2591" name="growbox_light_sensor" type="client_light_sensor_tsl2591.py" args="'growbox_light_sensor'" />
+    <node pkg="client_temp_humidity_si7021" name="growbox_temp_humitity" type="client_temp_humidity_si7021.py" args="'growbox_temp_humitity'" />
+</launch>

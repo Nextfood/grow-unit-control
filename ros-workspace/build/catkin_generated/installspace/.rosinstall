@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/nextfood/grow-unit-control/ros-workspace/install/setup.sh

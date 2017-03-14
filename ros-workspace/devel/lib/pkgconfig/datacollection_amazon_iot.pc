@@ -1,0 +1,8 @@
+prefix=/home/nextfood/grow-unit-control/ros-workspace/devel
+
+Name: datacollection_amazon_iot
+Description: Description of datacollection_amazon_iot
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/nextfood/grow-unit-control/ros-workspace/devel/lib 
+Requires: 

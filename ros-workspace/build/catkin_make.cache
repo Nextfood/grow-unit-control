@@ -1,0 +1,2 @@
+client_light_sensor_tsl2591:client_relay_x1:client_temp_humidity_si7021:datacollection_amazon_iot:nextfood_ros
+-DCATKIN_DEVEL_PREFIX=/home/nextfood/grow-unit-control/ros-workspace/devel -DCMAKE_INSTALL_PREFIX=/home/nextfood/grow-unit-control/ros-workspace/install -G Unix Makefiles

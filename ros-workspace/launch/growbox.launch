@@ -1,9 +1,0 @@
-<launch>
-
-  <group ns="growbox">
-    <node pkg="client_light_sensor_tsl2591" name="client_light_sensor_tsl2591" type="node" respawn="true"/>
-    <node pkg="datacollection_amazon_iot" name="datacollection_amazon_iot" type="node.py" respawn="true"/>
-  </group>
-
-
-</launch>

@@ -8,16 +8,18 @@ import time
 
 
 def get_device_id(serialport):
-    print "### Found interface module on " + serialport
-    ser = serial.Serial(serialport, 57600, timeout=0.5)
-    time.sleep(2)
-    ser.write(json.dumps({'cmd':'info'}))
-    infoRawJson = ser.read(65536)
-    if infoRawJson:
-        infoMsg = json.loads(infoRawJson)
-        print "    Module ID: " + infoMsg["id"]
-        print "    Module Info: " + json.dumps(infoMsg)
-
+    try:
+        print "### Found interface module on " + serialport
+        ser = serial.Serial(serialport, 57600, timeout=0.5)
+        time.sleep(2)
+        ser.write(json.dumps({'cmd':'info'}))
+        infoRawJson = ser.read(65536)
+        if infoRawJson:
+            infoMsg = json.loads(infoRawJson)
+            print "    Module ID: " + infoMsg["id"]
+            print "    Module Info: " + json.dumps(infoMsg)
+    except:
+        print "Exception occurred when opening "+serialport
 
 
 
