@@ -56,16 +56,6 @@ CMAKE_BINARY_DIR = /home/nextfood/grow-unit-control/ros-workspace/build
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target list_install_components
-list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
-.PHONY : list_install_components
-
-# Special rule for the target list_install_components
-list_install_components/fast: list_install_components
-
-.PHONY : list_install_components/fast
-
 # Special rule for the target install
 install: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
@@ -89,27 +79,16 @@ rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
 
-# Special rule for the target install/strip
-install/strip: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+.PHONY : edit_cache
 
-# Special rule for the target install/strip
-install/strip/fast: install/strip
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
 
-.PHONY : install/strip/fast
-
-# Special rule for the target install/local
-install/local: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local
-
-# Special rule for the target install/local
-install/local/fast: install/local
-
-.PHONY : install/local/fast
+.PHONY : edit_cache/fast
 
 # Special rule for the target test
 test:
@@ -122,16 +101,37 @@ test/fast: test
 
 .PHONY : test/fast
 
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-.PHONY : edit_cache
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
 
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
+# Special rule for the target install/local
+install/local/fast: install/local
 
-.PHONY : edit_cache/fast
+.PHONY : install/local/fast
+
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+
+.PHONY : list_install_components/fast
+
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: install/strip
+
+.PHONY : install/strip/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -165,19 +165,211 @@ depend:
 	cd /home/nextfood/grow-unit-control/ros-workspace/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
+# Convenience name for target.
+client_relay_x1/CMakeFiles/client_relay_x1_genpy.dir/rule:
+	cd /home/nextfood/grow-unit-control/ros-workspace/build && $(MAKE) -f CMakeFiles/Makefile2 client_relay_x1/CMakeFiles/client_relay_x1_genpy.dir/rule
+.PHONY : client_relay_x1/CMakeFiles/client_relay_x1_genpy.dir/rule
+
+# Convenience name for target.
+client_relay_x1_genpy: client_relay_x1/CMakeFiles/client_relay_x1_genpy.dir/rule
+
+.PHONY : client_relay_x1_genpy
+
+# fast build rule for target.
+client_relay_x1_genpy/fast:
+	cd /home/nextfood/grow-unit-control/ros-workspace/build && $(MAKE) -f client_relay_x1/CMakeFiles/client_relay_x1_genpy.dir/build.make client_relay_x1/CMakeFiles/client_relay_x1_genpy.dir/build
+.PHONY : client_relay_x1_genpy/fast
+
+# Convenience name for target.
+client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_py.dir/rule:
+	cd /home/nextfood/grow-unit-control/ros-workspace/build && $(MAKE) -f CMakeFiles/Makefile2 client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_py.dir/rule
+.PHONY : client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_py.dir/rule
+
+# Convenience name for target.
+client_relay_x1_generate_messages_py: client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_py.dir/rule
+
+.PHONY : client_relay_x1_generate_messages_py
+
+# fast build rule for target.
+client_relay_x1_generate_messages_py/fast:
+	cd /home/nextfood/grow-unit-control/ros-workspace/build && $(MAKE) -f client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_py.dir/build.make client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_py.dir/build
+.PHONY : client_relay_x1_generate_messages_py/fast
+
+# Convenience name for target.
+client_relay_x1/CMakeFiles/client_relay_x1_gencpp.dir/rule:
+	cd /home/nextfood/grow-unit-control/ros-workspace/build && $(MAKE) -f CMakeFiles/Makefile2 client_relay_x1/CMakeFiles/client_relay_x1_gencpp.dir/rule
+.PHONY : client_relay_x1/CMakeFiles/client_relay_x1_gencpp.dir/rule
+
+# Convenience name for target.
+client_relay_x1_gencpp: client_relay_x1/CMakeFiles/client_relay_x1_gencpp.dir/rule
+
+.PHONY : client_relay_x1_gencpp
+
+# fast build rule for target.
+client_relay_x1_gencpp/fast:
+	cd /home/nextfood/grow-unit-control/ros-workspace/build && $(MAKE) -f client_relay_x1/CMakeFiles/client_relay_x1_gencpp.dir/build.make client_relay_x1/CMakeFiles/client_relay_x1_gencpp.dir/build
+.PHONY : client_relay_x1_gencpp/fast
+
+# Convenience name for target.
+client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_lisp.dir/rule:
+	cd /home/nextfood/grow-unit-control/ros-workspace/build && $(MAKE) -f CMakeFiles/Makefile2 client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_lisp.dir/rule
+.PHONY : client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+client_relay_x1_generate_messages_lisp: client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_lisp.dir/rule
+
+.PHONY : client_relay_x1_generate_messages_lisp
+
+# fast build rule for target.
+client_relay_x1_generate_messages_lisp/fast:
+	cd /home/nextfood/grow-unit-control/ros-workspace/build && $(MAKE) -f client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_lisp.dir/build.make client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_lisp.dir/build
+.PHONY : client_relay_x1_generate_messages_lisp/fast
+
+# Convenience name for target.
+client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_cpp.dir/rule:
+	cd /home/nextfood/grow-unit-control/ros-workspace/build && $(MAKE) -f CMakeFiles/Makefile2 client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_cpp.dir/rule
+.PHONY : client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+client_relay_x1_generate_messages_cpp: client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_cpp.dir/rule
+
+.PHONY : client_relay_x1_generate_messages_cpp
+
+# fast build rule for target.
+client_relay_x1_generate_messages_cpp/fast:
+	cd /home/nextfood/grow-unit-control/ros-workspace/build && $(MAKE) -f client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_cpp.dir/build.make client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_cpp.dir/build
+.PHONY : client_relay_x1_generate_messages_cpp/fast
+
+# Convenience name for target.
+client_relay_x1/CMakeFiles/_client_relay_x1_generate_messages_check_deps_OperateRelay.dir/rule:
+	cd /home/nextfood/grow-unit-control/ros-workspace/build && $(MAKE) -f CMakeFiles/Makefile2 client_relay_x1/CMakeFiles/_client_relay_x1_generate_messages_check_deps_OperateRelay.dir/rule
+.PHONY : client_relay_x1/CMakeFiles/_client_relay_x1_generate_messages_check_deps_OperateRelay.dir/rule
+
+# Convenience name for target.
+_client_relay_x1_generate_messages_check_deps_OperateRelay: client_relay_x1/CMakeFiles/_client_relay_x1_generate_messages_check_deps_OperateRelay.dir/rule
+
+.PHONY : _client_relay_x1_generate_messages_check_deps_OperateRelay
+
+# fast build rule for target.
+_client_relay_x1_generate_messages_check_deps_OperateRelay/fast:
+	cd /home/nextfood/grow-unit-control/ros-workspace/build && $(MAKE) -f client_relay_x1/CMakeFiles/_client_relay_x1_generate_messages_check_deps_OperateRelay.dir/build.make client_relay_x1/CMakeFiles/_client_relay_x1_generate_messages_check_deps_OperateRelay.dir/build
+.PHONY : _client_relay_x1_generate_messages_check_deps_OperateRelay/fast
+
+# Convenience name for target.
+client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_eus.dir/rule:
+	cd /home/nextfood/grow-unit-control/ros-workspace/build && $(MAKE) -f CMakeFiles/Makefile2 client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_eus.dir/rule
+.PHONY : client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+client_relay_x1_generate_messages_eus: client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_eus.dir/rule
+
+.PHONY : client_relay_x1_generate_messages_eus
+
+# fast build rule for target.
+client_relay_x1_generate_messages_eus/fast:
+	cd /home/nextfood/grow-unit-control/ros-workspace/build && $(MAKE) -f client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_eus.dir/build.make client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_eus.dir/build
+.PHONY : client_relay_x1_generate_messages_eus/fast
+
+# Convenience name for target.
+client_relay_x1/CMakeFiles/client_relay_x1_generate_messages.dir/rule:
+	cd /home/nextfood/grow-unit-control/ros-workspace/build && $(MAKE) -f CMakeFiles/Makefile2 client_relay_x1/CMakeFiles/client_relay_x1_generate_messages.dir/rule
+.PHONY : client_relay_x1/CMakeFiles/client_relay_x1_generate_messages.dir/rule
+
+# Convenience name for target.
+client_relay_x1_generate_messages: client_relay_x1/CMakeFiles/client_relay_x1_generate_messages.dir/rule
+
+.PHONY : client_relay_x1_generate_messages
+
+# fast build rule for target.
+client_relay_x1_generate_messages/fast:
+	cd /home/nextfood/grow-unit-control/ros-workspace/build && $(MAKE) -f client_relay_x1/CMakeFiles/client_relay_x1_generate_messages.dir/build.make client_relay_x1/CMakeFiles/client_relay_x1_generate_messages.dir/build
+.PHONY : client_relay_x1_generate_messages/fast
+
+# Convenience name for target.
+client_relay_x1/CMakeFiles/client_relay_x1_geneus.dir/rule:
+	cd /home/nextfood/grow-unit-control/ros-workspace/build && $(MAKE) -f CMakeFiles/Makefile2 client_relay_x1/CMakeFiles/client_relay_x1_geneus.dir/rule
+.PHONY : client_relay_x1/CMakeFiles/client_relay_x1_geneus.dir/rule
+
+# Convenience name for target.
+client_relay_x1_geneus: client_relay_x1/CMakeFiles/client_relay_x1_geneus.dir/rule
+
+.PHONY : client_relay_x1_geneus
+
+# fast build rule for target.
+client_relay_x1_geneus/fast:
+	cd /home/nextfood/grow-unit-control/ros-workspace/build && $(MAKE) -f client_relay_x1/CMakeFiles/client_relay_x1_geneus.dir/build.make client_relay_x1/CMakeFiles/client_relay_x1_geneus.dir/build
+.PHONY : client_relay_x1_geneus/fast
+
+# Convenience name for target.
+client_relay_x1/CMakeFiles/client_relay_x1_genlisp.dir/rule:
+	cd /home/nextfood/grow-unit-control/ros-workspace/build && $(MAKE) -f CMakeFiles/Makefile2 client_relay_x1/CMakeFiles/client_relay_x1_genlisp.dir/rule
+.PHONY : client_relay_x1/CMakeFiles/client_relay_x1_genlisp.dir/rule
+
+# Convenience name for target.
+client_relay_x1_genlisp: client_relay_x1/CMakeFiles/client_relay_x1_genlisp.dir/rule
+
+.PHONY : client_relay_x1_genlisp
+
+# fast build rule for target.
+client_relay_x1_genlisp/fast:
+	cd /home/nextfood/grow-unit-control/ros-workspace/build && $(MAKE) -f client_relay_x1/CMakeFiles/client_relay_x1_genlisp.dir/build.make client_relay_x1/CMakeFiles/client_relay_x1_genlisp.dir/build
+.PHONY : client_relay_x1_genlisp/fast
+
+# Convenience name for target.
+client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_nodejs.dir/rule:
+	cd /home/nextfood/grow-unit-control/ros-workspace/build && $(MAKE) -f CMakeFiles/Makefile2 client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_nodejs.dir/rule
+.PHONY : client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+client_relay_x1_generate_messages_nodejs: client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_nodejs.dir/rule
+
+.PHONY : client_relay_x1_generate_messages_nodejs
+
+# fast build rule for target.
+client_relay_x1_generate_messages_nodejs/fast:
+	cd /home/nextfood/grow-unit-control/ros-workspace/build && $(MAKE) -f client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_nodejs.dir/build.make client_relay_x1/CMakeFiles/client_relay_x1_generate_messages_nodejs.dir/build
+.PHONY : client_relay_x1_generate_messages_nodejs/fast
+
+# Convenience name for target.
+client_relay_x1/CMakeFiles/client_relay_x1_gennodejs.dir/rule:
+	cd /home/nextfood/grow-unit-control/ros-workspace/build && $(MAKE) -f CMakeFiles/Makefile2 client_relay_x1/CMakeFiles/client_relay_x1_gennodejs.dir/rule
+.PHONY : client_relay_x1/CMakeFiles/client_relay_x1_gennodejs.dir/rule
+
+# Convenience name for target.
+client_relay_x1_gennodejs: client_relay_x1/CMakeFiles/client_relay_x1_gennodejs.dir/rule
+
+.PHONY : client_relay_x1_gennodejs
+
+# fast build rule for target.
+client_relay_x1_gennodejs/fast:
+	cd /home/nextfood/grow-unit-control/ros-workspace/build && $(MAKE) -f client_relay_x1/CMakeFiles/client_relay_x1_gennodejs.dir/build.make client_relay_x1/CMakeFiles/client_relay_x1_gennodejs.dir/build
+.PHONY : client_relay_x1_gennodejs/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... list_install_components"
 	@echo "... install"
 	@echo "... rebuild_cache"
-	@echo "... install/strip"
-	@echo "... install/local"
-	@echo "... test"
 	@echo "... edit_cache"
+	@echo "... client_relay_x1_genpy"
+	@echo "... test"
+	@echo "... client_relay_x1_generate_messages_py"
+	@echo "... client_relay_x1_gencpp"
+	@echo "... client_relay_x1_generate_messages_lisp"
+	@echo "... client_relay_x1_generate_messages_cpp"
+	@echo "... _client_relay_x1_generate_messages_check_deps_OperateRelay"
+	@echo "... client_relay_x1_generate_messages_eus"
+	@echo "... install/local"
+	@echo "... client_relay_x1_generate_messages"
+	@echo "... client_relay_x1_geneus"
+	@echo "... client_relay_x1_genlisp"
+	@echo "... list_install_components"
+	@echo "... install/strip"
+	@echo "... client_relay_x1_generate_messages_nodejs"
+	@echo "... client_relay_x1_gennodejs"
 .PHONY : help
 
 
