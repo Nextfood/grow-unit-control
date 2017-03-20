@@ -1,8 +1,0 @@
-prefix=/home/nextfood/grow-unit-control/ros-workspace/devel
-
-Name: nextfood_ros
-Description: Description of nextfood_ros
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/nextfood/grow-unit-control/ros-workspace/devel/lib 
-Requires: 

@@ -1,8 +1,0 @@
-prefix=/home/nextfood/grow-unit-control/ros-workspace/devel
-
-Name: client_relay_x1
-Description: Description of client_relay_x1
-Version: 0.0.0
-Cflags: -I/home/nextfood/grow-unit-control/ros-workspace/devel/include
-Libs: -L/home/nextfood/grow-unit-control/ros-workspace/devel/lib 
-Requires: 

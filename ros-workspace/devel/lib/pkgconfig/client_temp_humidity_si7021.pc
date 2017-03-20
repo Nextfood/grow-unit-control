@@ -1,8 +1,0 @@
-prefix=/home/nextfood/grow-unit-control/ros-workspace/devel
-
-Name: client_temp_humidity_si7021
-Description: Description of client_temp_humidity_si7021
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/nextfood/grow-unit-control/ros-workspace/devel/lib 
-Requires: 

@@ -1,8 +1,0 @@
-prefix=/home/nextfood/grow-unit-control/ros-workspace/devel
-
-Name: client_light_sensor_tsl2591
-Description: Description of client_light_sensor_tsl2591
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/nextfood/grow-unit-control/ros-workspace/devel/lib 
-Requires: 
