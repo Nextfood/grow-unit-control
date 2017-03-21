@@ -25,13 +25,13 @@ public:
 
     virtual String& updateData(String& json) {
         JsonBuilder s(json);
-        if (!s.get().containsKey(F("device"))) {
-            s.get().createNestedObject(F("device"));
+        if (!s.get().containsKey(F("devices"))) {
+            s.get().createNestedObject(F("devices"));
         }
-        if (!s.get()[F("device")].as<JsonObject&>().containsKey(F("pwm_power_driver"))) {
-            s.get()[F("device")].as<JsonObject&>().createNestedObject(F("pwm_power_driver"));
+        if (!s.get()[F("devices")].as<JsonObject&>().containsKey(F("pwm_power_driver"))) {
+            s.get()[F("devices")].as<JsonObject&>().createNestedObject(F("pwm_power_driver"));
         }
-        JsonObject& datanode = s.get()[F("device")][F("pwm_power_driver")];
+        JsonObject& datanode = s.get()[F("devices")][F("pwm_power_driver")];
 
         datanode[m_channelName] = m_pinLevel;
         return s.serialize(json);
@@ -39,14 +39,14 @@ public:
 
     virtual String& updateInfo(String& json) {
         JsonBuilder s(json);
-        if (!s.get().containsKey(F("device"))) {
-            s.get().createNestedObject(F("device"));
+        if (!s.get().containsKey(F("devices"))) {
+            s.get().createNestedObject(F("devices"));
         }
-        if (!s.get()[F("device")].as<JsonObject&>().containsKey(F("pwm_power_driver"))) {
-            s.get()[F("device")].as<JsonObject&>().createNestedObject(F("pwm_power_driver"));
+        if (!s.get()[F("devices")].as<JsonObject&>().containsKey(F("pwm_power_driver"))) {
+            s.get()[F("devices")].as<JsonObject&>().createNestedObject(F("pwm_power_driver"));
         }
-        JsonObject& datanode = s.get()[F("device")][F("pwm_power_driver")];
-        datanode["device"] = F("PWM Power Driver x3");
+        JsonObject& datanode = s.get()[F("devices")][F("pwm_power_driver")];
+        datanode["devices"] = F("PWM Power Driver");
         return s.serialize(json);
     }
 

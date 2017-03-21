@@ -25,15 +25,15 @@ public:
 
     virtual String& updateData(String& json) {
         JsonBuilder s(json);
-        JsonObject& datanode = s.get().createNestedObject(F("device")).createNestedObject(F("relay"));
+        JsonObject& datanode = s.get().createNestedObject(F("devices")).createNestedObject(F("relay"));
         datanode["state"] = m_pinState;
         return s.serialize(json);
     }
 
     virtual String& updateInfo(String& json) {
         JsonBuilder s(json);
-        JsonObject& datanode = s.get().createNestedObject(F("device")).createNestedObject(F("relay"));
-        datanode["device"] = F("SONGLE x1");
+        JsonObject& datanode = s.get().createNestedObject(F("devices")).createNestedObject(F("relay"));
+        datanode["devices"] = F("SONGLE x1");
         return s.serialize(json);
     }
 

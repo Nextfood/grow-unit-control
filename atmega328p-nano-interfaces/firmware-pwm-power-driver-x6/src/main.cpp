@@ -16,14 +16,17 @@ String g_info;
 String g_data;
 
 
-#define NUMBER_OF_DEVICES 3
+#define NUMBER_OF_DEVICES 6
 
 
 
 Device* deviceArray[NUMBER_OF_DEVICES] = {
     new DevicePwmPowerDriver(3, "ch_1"), // Corresponds to pin D3
     new DevicePwmPowerDriver(5, "ch_2"), // Corresponds to pin D5
-    new DevicePwmPowerDriver(6, "ch_3") // Corresponds to pin D6
+    new DevicePwmPowerDriver(6, "ch_3"), // Corresponds to pin D6
+    new DevicePwmPowerDriver(9, "ch_4"), // Corresponds to pin D9
+    new DevicePwmPowerDriver(10, "ch_5"), // Corresponds to pin D10
+    new DevicePwmPowerDriver(12, "ch_6") // Corresponds to pin D12
     // Add more devices here
 };
 

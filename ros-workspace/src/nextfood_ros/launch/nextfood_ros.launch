@@ -1,5 +1,7 @@
 <launch>
-    <node pkg="client_light_sensor_tsl2591" name="growbox_light_sensor" type="client_light_sensor_tsl2591.py" args="'growbox_light_sensor'" />
-    <node pkg="client_temp_humidity_si7021" name="growbox_temp_humitity" type="client_temp_humidity_si7021.py" args="'growbox_temp_humitity'" />
-    <node pkg="client_relay_x1" name="growbox_water_pump" type="node.py" args="'growbox_water_pump'" />
+    <node pkg="client_light_sensor_tsl2591" name="growbox_light_sensor"  type="node.py" args="'growbox_light_sensor'" />
+    <node pkg="client_temp_humidity_si7021" name="growbox_temp_humitity" type="node.py" args="'growbox_temp_humitity'" />
+    <node pkg="client_relay_x1"             name="growbox_water_pump"    type="node.py" args="'growbox_water_pump'" />
+    <node pkg="client_pwm_driver_x6"        name="growbox_led_driver"    type="node.py" args="'growbox_led_driver'" />
+    <node pkg="client_pwm_driver_x6"        name="growbox_water_valves"  type="node.py" args="'growbox_water_valves'" />
 </launch>

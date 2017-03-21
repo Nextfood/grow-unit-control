@@ -46,12 +46,12 @@ class SearchService:
     def get_device_id(self, serialport):
         id = ""
         try:
-            ser = serial.Serial(serialport, 57600, timeout=0.5)
+            ser = serial.Serial(serialport, 57600, timeout=0.1)
             lock = LockHandle(ser.fileno())
             lock.acquireNB()
             # Wait for the Arduino to come out of RESET
             # mode (after DTR is pulled up again)
-            time.sleep(2)
+            time.sleep(1)
             ser.write(json.dumps({'cmd': 'info'}))
             infoRawJson = ser.read(65536)
             if infoRawJson:

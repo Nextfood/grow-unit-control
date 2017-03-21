@@ -1,0 +1,4 @@
+uint8 device
+float64 pwm
+---
+float64[6] out
