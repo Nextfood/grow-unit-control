@@ -32,7 +32,7 @@ def main():
 
     # Wait for the Arduino to come out of RESET mode (after DTR is pulled up
     # again)
-    time.sleep(1)
+    time.sleep(2)
 
     temperature_pub = rospy.Publisher(
         device_id + '/temperature', Float64, queue_size=10)

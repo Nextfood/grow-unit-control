@@ -61,7 +61,7 @@ def main():
 
     # Wait for the Arduino to come out of RESET mode (after DTR is pulled up
     # again)
-    time.sleep(1)
+    time.sleep(2)
 
     try:
         publish_pwm_state()

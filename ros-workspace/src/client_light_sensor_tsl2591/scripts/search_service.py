@@ -41,7 +41,6 @@ class LockHandle:
     def release(self):
         fcntl.flock(self.handle, fcntl.LOCK_UN)
 
-
 class SearchService:
 
     def get_device_id(self, serialport):
@@ -52,7 +51,7 @@ class SearchService:
             lock.acquireNB()
             # Wait for the Arduino to come out of RESET
             # mode (after DTR is pulled up again)
-            time.sleep(1)
+            time.sleep(2)
             ser.write(json.dumps({'cmd': 'info'}))
             infoRawJson = ser.read(65536)
             if infoRawJson:
@@ -60,15 +59,13 @@ class SearchService:
                 id = infoMsg["id"]
             ser.close()
         except IOError as e:
-            rospy.loginfo("IO error occurred when getting device ID ({0}): {1}".format(
-                e.errno, e.strerror))
+            rospy.loginfo("IO error occurred when getting device ID ({0}): {1}".format(e.errno, e.strerror))
         return id
 
     def find_serial_port(self, id_string):
         lock = Lock("/tmp/ros_serialport_scan.lock")
         lock.acquire()
-        rospy.loginfo(
-            "Finding serial port interface module with ID '" + id_string + "'...")
+        rospy.loginfo("Finding serial port interface module with ID '" + id_string + "'...")
 
         listPorts = serial.tools.list_ports.comports()
 
@@ -81,9 +78,7 @@ class SearchService:
 
         lock.release()
         if foundDevice:
-            rospy.loginfo(
-                "Found matching serial port interface module on " + foundDevice)
+            rospy.loginfo("Found matching serial port interface module on " + foundDevice)
             return foundDevice
         else:
-            raise Exception(
-                ("Unable to find an interface module with the ID " + id_string))
+            raise Exception(("Unable to find an interface module with the ID " + id_string))
