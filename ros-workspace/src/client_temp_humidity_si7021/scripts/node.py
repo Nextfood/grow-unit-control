@@ -1,5 +1,4 @@
 #!/usr/bin/python
-
 import sys
 import json
 import serial
@@ -7,7 +6,7 @@ import serial.tools.list_ports
 import time
 import rospy
 from std_msgs.msg import Float64
-from search_service import SearchService, LockHandle
+from atmega328p_service_discovery.srv import *
 
 polling_frequency = 1  # Hz
 
@@ -20,15 +19,23 @@ def main():
 
     device_id = sys.argv[1]
 
-    search = SearchService()
+    rospy.init_node(device_id, anonymous=True)
 
-    serialport = search.find_serial_port(device_id)
 
-    rospy.loginfo("Locking serial port " + serialport)
+    serial_port = None
+    try:
+        rospy.loginfo("Starting service client for '{0}'.".format(device_id))
+        rospy.wait_for_service("atmega328p_service_discovery/lookup")
+        serviceLookup = rospy.ServiceProxy("atmega328p_service_discovery/lookup", ServiceSerial)
+        resp = serviceLookup(device_id)
+        serial_port = resp.serial
+    except rospy.ServiceException as exc:
+        rospy.logerror("The serial port service did not process request: " + str(exc))
 
-    ser = serial.Serial(serialport, 57600, timeout=0.1)
-    lock = LockHandle(ser.fileno())
-    lock.acquire()
+
+    rospy.loginfo("Found serial port for service '{0}' on: {1}".format(device_id, serial_port))
+
+    serial_handle = serial.Serial(serial_port, 57600, timeout=0.1)
 
     # Wait for the Arduino to come out of RESET mode (after DTR is pulled up
     # again)
@@ -38,7 +45,7 @@ def main():
         device_id + '/temperature', Float64, queue_size=10)
     humidity_pub = rospy.Publisher(
         device_id + '/humidity', Float64, queue_size=10)
-    rospy.init_node(device_id, anonymous=True)
+
     rate = rospy.Rate(polling_frequency)
 
     while not rospy.is_shutdown():

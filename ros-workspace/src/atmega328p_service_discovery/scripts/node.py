@@ -9,7 +9,6 @@ from threading import Thread, Lock
 import rospy
 from atmega328p_service_discovery.srv import *
 
-mutex = Lock()
 
 class SearchServices:
 
@@ -43,31 +42,22 @@ class SearchServices:
         return id
 
     def discover_services(self):
-
         rospy.loginfo("Finding serial port interface modules.")
-        mutex.acquire()
+        listPorts = serial.tools.list_ports.comports()
+  
+        for port in listPorts:
+            if port.vid == 6790 and port.pid == 29987:
+                id = self.get_device_id(port.device)
+                if id:
+                    self.foundDevices[id] = port.device
+                    rospy.loginfo("Found service '{0}' on device: {1}".format(id, port.device))
 
-        try:
-            listPorts = serial.tools.list_ports.comports()
-      
-            for port in listPorts:
-                if port.vid == 6790 and port.pid == 29987:
-                    id = self.get_device_id(port.device)
-                    if id:
-                        self.foundDevices[id] = port.device
-                        rospy.loginfo("Found service '{0}' on device: {1}".format(id, port.device))
+        if not self.foundDevices:
+            rospy.logwarning("Unable to find any services on serial ports.")
 
-            if not self.foundDevices:
-                rospy.logwarning("Unable to find any services on serial ports.")
-        finally:
-            mutex.release()
 
 def handle_server_request(req):
     global m_services
-    try: # Mutex for guarantee that the discovery is done before someone does a request
-        mutex.acquire()
-    finally:
-        mutex.release()
     return ServiceSerialResponse(m_services.get_serial_port(req.service))
 
 m_services = SearchServices()
@@ -77,10 +67,10 @@ def main():
 
     rospy.init_node("atmega328p_service_discovery", anonymous=False)
 
+    m_services.discover_services()
+
     pwm_service = rospy.Service(
         'atmega328p_service_discovery/lookup', ServiceSerial, handle_server_request)
-
-    m_services.discover_services()
 
 
     rospy.spin()

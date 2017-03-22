@@ -4,5 +4,5 @@
     <node pkg="client_relay_x1"              name="growbox_water_pump"    type="node.py" args="'growbox_water_pump'" />
     <node pkg="client_pwm_driver_x6"         name="growbox_led_driver"    type="node.py" args="'growbox_led_driver'" />
     <node pkg="client_pwm_driver_x6"         name="growbox_water_valves"  type="node.py" args="'growbox_water_valves'" />
-    <node pkg="atmega328p_service_discovery" name="growbox_water_valves"  type="node.py" />
+    <node pkg="atmega328p_service_discovery" name="atmega328p_service_discovery"  type="node.py" />
 </launch>
