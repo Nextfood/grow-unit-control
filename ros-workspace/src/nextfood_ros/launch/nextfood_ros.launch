@@ -5,4 +5,6 @@
     <node pkg="client_pwm_driver_x6"         name="growbox_led_driver"    type="node.py" args="'growbox_led_driver'" />
     <node pkg="client_pwm_driver_x6"         name="growbox_water_valves"  type="node.py" args="'growbox_water_valves'" />
     <node pkg="atmega328p_service_discovery" name="atmega328p_service_discovery"  type="node.py" />
+    <node pkg="nextfood_tasks" name="lighting_server"  type="do_lighting.py" />
+    <node pkg="nextfood_tasks" name="watering_server"  type="do_watering.py" />
 </launch>

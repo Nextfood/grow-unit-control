@@ -1,0 +1,14 @@
+# goal
+float64 runtime
+float64 white_intensity
+float64 red_intensity
+float64 blue_intensity
+---
+# result
+float64 total_runtime
+---
+# feedback
+float64 runtime_completed
+float64 current_white_intensity
+float64 current_red_intensity
+float64 current_blue_intensity
