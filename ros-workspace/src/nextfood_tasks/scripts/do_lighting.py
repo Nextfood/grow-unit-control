@@ -8,7 +8,7 @@ import time
 import actionlib
 from client_pwm_driver_x6.srv import *
 
-from nextfood_tasks.msg import DoLightingAction
+from nextfood_tasks.msg import *
 
 def secPrettyPrint(seconds):
     m, s = divmod(seconds, 60)
@@ -21,7 +21,7 @@ class DoLightingServer:
     self._server = actionlib.SimpleActionServer(self._action_name, DoLightingAction, self.execute, False)
     self._server.start()
   
-  def setLights(self, white, red, blue):
+  def set_lights(self, white, red, blue):
     white_device = 1
     red_device = 2
     blue_device = 3
@@ -48,7 +48,7 @@ class DoLightingServer:
 
     start_time = time.time()
 
-    for i in range(1, goal.runtime):
+    for i in range(1, int(goal.runtime)):
         # check that preempt has not been requested by the client
         if self._server.is_preempt_requested():
             rospy.loginfo('Service {} has been preempted. Stopping the lighting.'.format(self._action_name))
@@ -56,9 +56,9 @@ class DoLightingServer:
             success = False
             break
 
-        setLights(white,red,blue)
+        self.set_lights(white,red,blue)
 
-        fb = DoLightingActionFeedback()
+        fb = DoLightingFeedback()
         fb.runtime_completed = i
         fb.current_white_intensity = white
         fb.current_red_intensity = red
@@ -66,16 +66,16 @@ class DoLightingServer:
         self._server.publish_feedback(fb)
         r.sleep()
 
-    setLights(0,0,0)
+    self.set_lights(0,0,0)
 
     if success:
-            res = DoLightingActionResult()
-            res.runtime_completed = time.time() - start_time
-            rospy.loginfo('The light action server has finished its goal. Lights ran for {}'.format(secPrettyPrint(res.runtime_completed)))
+            res = DoLightingResult()
+            res.total_runtime = time.time() - start_time
+            rospy.loginfo('The light action server has finished its goal. Lights ran for {}'.format(secPrettyPrint(res.total_runtime)))
             self._server.set_succeeded(res)
 
 
 if __name__ == '__main__':
-  rospy.init_node('do_lighting_server')
+  rospy.init_node('lighting_server')
   server = DoLightingServer(rospy.get_name())
   rospy.spin()

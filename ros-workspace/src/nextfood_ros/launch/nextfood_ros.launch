@@ -7,4 +7,5 @@
     <node pkg="atmega328p_service_discovery" name="atmega328p_service_discovery"  type="node.py" />
     <node pkg="nextfood_tasks" name="lighting_server"  type="do_lighting.py" />
     <node pkg="nextfood_tasks" name="watering_server"  type="do_watering.py" />
+    <node pkg="nextfood_recipes" name="simple_day_rythm_light"  type="simple_day_rythm_light.py" />
 </launch>
