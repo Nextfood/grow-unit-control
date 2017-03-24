@@ -32,7 +32,7 @@ class DoLightingServer:
         set_light(red_device,red)
         set_light(blue_device,blue)
     except rospy.ServiceException, e:
-        rospy.logerror("Service call to 'growbox_led_driver/pwm' failed: {}".format(e))
+        rospy.logerr("Service call to 'growbox_led_driver/pwm' failed: {}".format(e))
 
   def execute(self, goal):
 

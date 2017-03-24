@@ -43,7 +43,7 @@ def main():
     ser = serial.Serial(sys.argv[1], 57600, timeout=0.5)
     time.sleep(2)
 
-    ser.write(json.dumps({'pwm_power_driver': {'ch_1': 100,'ch_2': 100,'ch_3': 100}}))
+    ser.write(json.dumps({'pwm_power_driver': {'ch_1': 0,'ch_2': 0,'ch_3': 0}}))
     dataJson = ser.read(65536)
     if dataJson:
         message = json.loads(dataJson)

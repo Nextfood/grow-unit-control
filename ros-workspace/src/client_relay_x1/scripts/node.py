@@ -52,7 +52,7 @@ def main():
         resp = serviceLookup(device_id)
         serial_port = resp.serial
     except rospy.ServiceException as exc:
-        rospy.logerror("The serial port service did not process request: " + str(exc))
+        rospy.logerr("The serial port service did not process request: " + str(exc))
 
 
     rospy.loginfo("Found serial port for service '{0}' on: {1}".format(device_id, serial_port))

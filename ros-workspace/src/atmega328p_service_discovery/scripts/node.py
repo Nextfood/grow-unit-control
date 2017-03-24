@@ -36,7 +36,7 @@ class SearchServices:
                 ser.close()
                 break
             except IOError as e:
-                rospy.logerror("IO error occurred when getting device ID ({0}): {1}".format(e.errno, e.strerror))
+                rospy.logerr("IO error occurred when getting device ID ({0}): {1}".format(e.errno, e.strerror))
         if not id:
             rospy.logwarn("Unable to get device ID string from valid serial port device.")
         return id

@@ -17,7 +17,7 @@ def pretty_print_sec(seconds):
 
 setup = {
     'watering_on_start_time': "immediately",  # [immediately] or [hh:mm:ss]
-    'watering_on_frequency': 3600,  # [s]
+    'watering_on_frequency': 60 * 60,  # [s]
     'watering_on_duration': 1.0,  # [s]
 }
 
