@@ -2,18 +2,23 @@
 #define _DeviceRelay_H_
 
 #include "Device.h"
-#include "JsonBuilder.h"
+#include "SetupRelay.h"
+#include "DataRelay.h"
+#include "InfoRelay.h"
+#include "ConfigureRelay.h"
 
-class DeviceRelay : public Device {
+template<int CHANNELS>
+class DeviceRelay : public Device<SetupRelay, DataRelay, InfoRelay, ConfigureRelay> {
 public:
 
-    DeviceRelay(int pin, bool initialState, bool invert = false)
-    : m_pin(pin), m_pinState(initialState), m_invert(invert) {
-    }
-
-    virtual void setup() {
-        pinMode(m_pin, OUTPUT);
-        (m_pinState ^ m_invert) ? digitalWrite(m_pin, HIGH) : digitalWrite(m_pin, LOW);
+    virtual void setup(SetupRelay& setup) {
+        for (int i = 0; i < CHANNELS; ++i) {
+            m_pin[i] = setup.pin[i];
+            m_relay[i] = setup.initState[i];
+            m_invert[i] = setup.invert[i];
+            pinMode(m_pin[i], OUTPUT);
+            (m_relay[i] ^ m_invert[i]) ? digitalWrite(m_pin[i], HIGH) : digitalWrite(m_pin[i], LOW);
+        }
     }
 
     virtual void initiateUpdateData() {
@@ -23,40 +28,28 @@ public:
         return true;
     }
 
-    virtual String& updateData(String& json) {
-        JsonBuilder s(json);
-        JsonObject& datanode = s.get().createNestedObject(F("devices")).createNestedObject(F("relay"));
-        datanode["state"] = m_pinState;
-        return s.serialize(json);
-    }
-
-    virtual String& updateInfo(String& json) {
-        JsonBuilder s(json);
-        JsonObject& datanode = s.get().createNestedObject(F("devices")).createNestedObject(F("relay"));
-        datanode["devices"] = F("SONGLE x1");
-        return s.serialize(json);
-    }
-
-    virtual bool configure(String& json) {
-        JsonBuilder s(json);
-        JsonObject& root = s.get();
-        if (root.containsKey(F("relay")) && root[F("relay")].is<JsonObject&>()) {
-            JsonObject& dev_root = root[F("relay")].as<JsonObject&>();
-            if (dev_root.containsKey(F("state"))) {
-                m_pinState = dev_root[F("state")].as<bool>();
-                (m_pinState ^ m_invert) ? digitalWrite(m_pin, HIGH) : digitalWrite(m_pin, LOW);
-                return true;
-            }
+    virtual DataRelay& updateData(DataRelay& data) {
+        for (int i = 0; i < CHANNELS; ++i) {
+            data.relay[i] = m_relay[i];
         }
-        return false;
+        return data;
     }
 
+    virtual InfoRelay& updateInfo(InfoRelay& info) {
+        return info;
+    }
 
+    virtual bool configure(ConfigureRelay& conf) {
+        for (int i = 0; i < CHANNELS; ++i) {
+            (conf.relay[i] ^ m_invert[i]) ? digitalWrite(m_pin[i], HIGH) : digitalWrite(m_pin[i], LOW);
+            m_relay[i] = conf.relay[i];
+        }
+        return true;
+    }
 private:
-
-    int m_pin;
-    bool m_pinState, m_invert;
-
+    int m_pin[CHANNELS];
+    bool m_relay[CHANNELS];
+    bool m_invert[CHANNELS];
 };
 
 
