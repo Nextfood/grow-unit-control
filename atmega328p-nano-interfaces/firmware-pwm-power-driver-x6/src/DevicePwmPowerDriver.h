@@ -2,18 +2,22 @@
 #define _DevicePwmPowerDriver_H_
 
 #include "Device.h"
-#include "JsonBuilder.h"
+#include "SetupPwm.h"
+#include "DataPwm.h"
+#include "InfoPwm.h"
+#include "ConfigurePwm.h"
 
-class DevicePwmPowerDriver : public Device {
+template<int CHANNELS>
+class DevicePwmPowerDriver : public Device<SetupPwm, DataPwm, InfoPwm, ConfigurePwm> {
 public:
 
-    DevicePwmPowerDriver(int pin, String channelName)
-    : m_pin(pin), m_pinLevel(0.0), m_channelName(channelName) {
-    }
-
-    virtual void setup() {
-        pinMode(m_pin, OUTPUT);
-        digitalWrite(m_pin, LOW);
+    virtual void setup(SetupPwm& setup) {
+        for (int i = 0; i < CHANNELS; ++i) {
+            m_pin[i] = setup.pin[i];
+            m_pwm[i] = setup.pwm[i];
+            pinMode(m_pin[i], OUTPUT);
+            digitalWrite(m_pin[i], LOW);
+        }
     }
 
     virtual void initiateUpdateData() {
@@ -23,63 +27,38 @@ public:
         return true;
     }
 
-    virtual String& updateData(String& json) {
-        JsonBuilder s(json);
-        if (!s.get().containsKey(F("devices"))) {
-            s.get().createNestedObject(F("devices"));
+    virtual DataPwm& updateData(DataPwm& data) {
+        for (int i = 0; i < CHANNELS; ++i) {
+            data.pwm[i] = m_pwm[i];
         }
-        if (!s.get()[F("devices")].as<JsonObject&>().containsKey(F("pwm_power_driver"))) {
-            s.get()[F("devices")].as<JsonObject&>().createNestedObject(F("pwm_power_driver"));
-        }
-        JsonObject& datanode = s.get()[F("devices")][F("pwm_power_driver")];
-
-        datanode[m_channelName] = m_pinLevel;
-        return s.serialize(json);
+        return data;
     }
 
-    virtual String& updateInfo(String& json) {
-        JsonBuilder s(json);
-        if (!s.get().containsKey(F("devices"))) {
-            s.get().createNestedObject(F("devices"));
-        }
-        if (!s.get()[F("devices")].as<JsonObject&>().containsKey(F("pwm_power_driver"))) {
-            s.get()[F("devices")].as<JsonObject&>().createNestedObject(F("pwm_power_driver"));
-        }
-        JsonObject& datanode = s.get()[F("devices")][F("pwm_power_driver")];
-        datanode["devices"] = F("PWM Power Driver");
-        return s.serialize(json);
+    virtual InfoPwm& updateInfo(InfoPwm& info) {
+        return info;
     }
 
-    virtual bool configure(String& json) {
-        JsonBuilder s(json);
-        JsonObject& root = s.get();
-        if (root.containsKey(F("pwm_power_driver")) && root[F("pwm_power_driver")].is<JsonObject&>()) {
-            JsonObject& dev_root = root[F("pwm_power_driver")].as<JsonObject&>();
-            if (dev_root.containsKey(m_channelName)) {
-                m_pinLevel = dev_root[m_channelName].as<float>();
-                if (m_pinLevel <= 0.0) {
-                    digitalWrite(m_pin, LOW);
-                    m_pinLevel = 0.0;
-                } else if (m_pinLevel >= 100.0) {
-                    digitalWrite(m_pin, HIGH);
-                    m_pinLevel = 100.0;
-                } else {
-                    analogWrite(m_pin, (int) (m_pinLevel * 255) / 100);
-                }
-                return true;
+    virtual bool configure(ConfigurePwm& conf) {
+        for (int i = 0; i < CHANNELS; ++i) {
+            if (conf.pwm[i] <= 0.0) {
+                digitalWrite(m_pin[i], LOW);
+                m_pwm[i] = 0.0;
+            } else if (conf.pwm[i] >= 100.0) {
+                digitalWrite(m_pin[i], HIGH);
+                m_pwm[i] = 100.0;
+            } else {
+                int v = (conf.pwm[i] * 255) / 100;
+                analogWrite(m_pin[i], v);
+                m_pwm[i] = conf.pwm[i];
             }
         }
-        return false;
+        return true;
     }
 
 
 private:
-
-    int m_pin;
-    float m_pinLevel;
-    String m_channelName;
-
-
+    float m_pwm[CHANNELS];
+    int m_pin[CHANNELS];
 };
 
 
