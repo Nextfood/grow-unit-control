@@ -24,29 +24,22 @@ def get_device_id(serialport):
 
 
 def find_serial_port():
-    print "Finding serial port interface modules (on ID 1a86:7523)"    
-    print ""
-    listPorts = serial.tools.list_ports.comports()
+    try:
+        print "Finding serial port interface modules (on ID 1a86:7523)"
+        print ""
+        listPorts = serial.tools.list_ports.comports()
 
-    for port in listPorts:
-        if port.vid == 6790 and port.pid == 29987:
-            get_device_id(port.device)
-            print ""
-    
-    
-
+        for port in listPorts:
+            print "Inspecting device " + port.device
+            if port.vid == 6790 and port.pid == 29987:
+                get_device_id(port.device)
+                print ""
+    except:
+        print "Exception occurred when scanning for serial ports."
 
 
 def main():
-    
-                   
     serialport = find_serial_port()
 
-    
 
 if __name__ == "__main__": main()
-
-
-
-    
-    

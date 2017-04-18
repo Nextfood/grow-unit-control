@@ -20,7 +20,7 @@ def main():
         print json.dumps(message, sort_keys=True, 
             indent=4, separators=(',', ': '))
         print ""
-    time.sleep(3)
+    time.sleep(1)
 
     ser.write(json.dumps({'relay': {'state': False}}))
     dataJson = ser.read(65536)
