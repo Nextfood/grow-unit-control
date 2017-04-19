@@ -1,12 +1,14 @@
 <launch>
-    <node pkg="client_light_sensor_tsl2591"  name="growbox_light_sensor"  type="node.py" args="'growbox_light_sensor'" />
+<!--    <node pkg="client_light_sensor_tsl2591"  name="growbox_light_sensor"  type="node.py" args="'growbox_light_sensor'" />
     <node pkg="client_temp_humidity_si7021"  name="growbox_temp_humitity" type="node.py" args="'growbox_temp_humitity'" />
     <node pkg="client_relay_x1"              name="growbox_water_pump"    type="node.py" args="'growbox_water_pump'" />
     <node pkg="client_pwm_driver_x6"         name="growbox_led_driver"    type="node.py" args="'growbox_led_driver'" />
-    <node pkg="client_pwm_driver_x6"         name="growbox_water_valves"  type="node.py" args="'growbox_water_valves'" />
+    <node pkg="client_pwm_driver_x6"         name="growbox_water_valves"  type="node.py" args="'growbox_water_valves'" /> -->
+
     <node pkg="atmega328p_service_discovery" name="atmega328p_service_discovery"  type="node.py" />
-    <node pkg="nextfood_tasks" name="lighting_server"  type="do_lighting.py" />
+
+<!--    <node pkg="nextfood_tasks" name="lighting_server"  type="do_lighting.py" />
     <node pkg="nextfood_tasks" name="watering_server"  type="do_watering.py" />
-    <node pkg="nextfood_recipes" name="simple_day_rythm_light"  type="simple_day_rythm_light.py" />
-    <node pkg="nextfood_recipes" name="simple_day_rythm_water"  type="simple_day_rythm_water.py" />
+    <node pkg="nextfood_recipes" name="simple_day_rythm_light"  type="simple_day_rythm_light.py" /> 
+    <node pkg="nextfood_recipes" name="simple_day_rythm_water"  type="simple_day_rythm_water.py" /> -->
 </launch>

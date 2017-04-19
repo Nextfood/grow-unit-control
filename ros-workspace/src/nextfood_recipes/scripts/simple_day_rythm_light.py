@@ -55,9 +55,9 @@ class ActionClient:
                 rospy.loginfo("Starting {} action immediately.".format(self._name))
 
             while 1:
-	            start_time = rospy.Time()
+	            start_time = rospy.get_time()
         	    self._action_method(self._duration)
-                    rospy.sleep(rospy.Time() - start_time + rospy.Duration.from_sec(self._frequency))
+                    rospy.sleep(rospy.Duration.from_sec(self._frequency) - (rospy.get_time() - start_time))
 
         except rospy.ROSInterruptException:
             rospy.logwarn("The action client recipe was interrupted.")
@@ -83,9 +83,9 @@ class Actions:
 
 if __name__ == '__main__':
     try:
-        rospy.init_node('simple_day_rythm')
+        rospy.init_node('simple_day_rythm_light')
 
-        rospy.loginfo("Starting simple day rythm.")
+        rospy.loginfo("Starting simple day rythm light.")
 
         actions = Actions()
 
@@ -98,4 +98,4 @@ if __name__ == '__main__':
         rospy.spin()
 
     except rospy.ROSInterruptException:
-        rospy.logwarn("The simple_day_rythm script was interrupted.")
+        rospy.logwarn("The simple_day_rythm_light script was interrupted.")

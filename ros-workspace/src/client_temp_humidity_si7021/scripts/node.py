@@ -50,8 +50,8 @@ def main():
 
     while not rospy.is_shutdown():
         try:
-            ser.write(json.dumps({'cmd': 'data'}))
-            dataJson = ser.read(65536)
+            serial_handle.write(json.dumps({'cmd': 'data'}))
+            dataJson = serial_handle.read(65536)
             if dataJson:
                 message = json.loads(dataJson)
                 if "sensors" in message and "si7021" in message['sensors']:
@@ -59,8 +59,8 @@ def main():
                         message['sensors']['si7021']['temperature'])
                     humidity_pub.publish(message['sensors'][
                                          'si7021']['humidity'])
-        except:
-            print("Exception occurred when polling device.")
+        except BaseException as e:
+            rospy.logerr("Exception occurred when polling device: " + str(e))
         rate.sleep()
 
 

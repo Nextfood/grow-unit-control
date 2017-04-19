@@ -16,9 +16,9 @@ def pretty_print_sec(seconds):
 
 
 setup = {
-    'watering_on_start_time': "immediately",  # [immediately] or [hh:mm:ss]
-    'watering_on_frequency': 5 * 60,  # [s]
-    'watering_on_duration': 0.7,  # [s]
+    'water_pumping_on_start_time': "immediately",  # [immediately] or [hh:mm:ss]
+    'water_pumping_on_frequency': 5 * 60,  # [s]
+    'water_pumping_on_duration': 4,  # [s]
 }
 
 
@@ -55,8 +55,8 @@ class ActionClient:
                 rospy.loginfo("Starting {} action immediately.".format(self._name))
 
             while 1:
-                    start_time = rospy.get_time()
-                    self._action_method(self._duration)
+	            start_time = rospy.get_time()
+        	    self._action_method(self._duration)
                     sleeptime = self._frequency - (rospy.get_time() - start_time)
                     rospy.loginfo("Sleeping for {} s before next action.".format(sleeptime))
                     rospy.sleep(sleeptime)
@@ -66,35 +66,41 @@ class ActionClient:
 
 class Actions:
 
-	def __init__(self):
-            self._water_client = actionlib.SimpleActionClient('watering_server', DoWateringAction)
-            self._water_client.wait_for_server()
-
 	def watering_on(self, runtime):
-	    # Creates a goal to send to the action server.
-	    goal = DoWateringGoal()
-	    goal.branch_watering_time = runtime
-	    self._water_client.send_goal(goal)
-	    self._water_client.wait_for_result()
-	    return self._water_client.get_result()
-
+            try:
+                    pump_client = actionlib.SimpleActionClient('water_pumping_server', DoWaterPumpingAction)
+                    if pump_client.wait_for_server(rospy.Duration(60)) == False:
+                           raise RuntimeError("Water pumping server does not seems to be online.")
+                    # Creates a goal to send to the action server.
+                    goal = DoWaterPumpingGoal()
+                    goal.water_pumping_time = runtime
+                    pump_client.send_goal(goal)
+                    pump_client.wait_for_result()
+                    return pump_client.get_result()
+            except RuntimeError as e:
+                    rospy.logwarn("Timeout occurred: " + str(e))
+            except BaseException as e:
+                    rospy.logwarn("The water pump action failed: " + str(e))
+            return 0
 
 if __name__ == '__main__':
     try:
-        rospy.init_node('simple_day_rythm_water')
+        rospy.init_node('simple_day_rythm_pump')
 
-        rospy.loginfo("Starting simple day rythm water.")
+        rospy.loginfo("Starting simple day rythm water pump.")
 
         actions = Actions()
 
-
-        watering_client = ActionClient("Watering", setup['watering_on_start_time'],
-					setup['watering_on_frequency'], setup['watering_on_duration'], actions.watering_on)
+        watering_client = ActionClient("Water Pumping", setup['water_pumping_on_start_time'],
+					setup['water_pumping_on_frequency'], setup['water_pumping_on_duration'], actions.watering_on)
         watering_thread = threading.Thread(target=watering_client.run)
         watering_thread.daemon = True
         watering_thread.start()
 
         rospy.spin()
 
+
+        rospy.loginfo("The simple day rythm water pump is exiting.")
+
     except rospy.ROSInterruptException:
-        rospy.logwarn("The simple_day_rythm_water script was interrupted.")
+        rospy.logwarn("The simple_day_rythm_pump script was interrupted.")

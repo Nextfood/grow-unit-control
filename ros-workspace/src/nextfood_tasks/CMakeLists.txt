@@ -66,6 +66,7 @@ add_action_files(
    FILES
    DoLighting.action
    DoWatering.action 
+   DoWaterPumping.action
 )
 
 ## Generate added messages and services with any dependencies listed here
