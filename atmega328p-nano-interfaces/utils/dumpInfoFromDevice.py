@@ -56,12 +56,12 @@ def main():
 
     print "Connected."
     while True:
-        dataJson = serial_port_device.serial_query(json.dumps({'cmd': 'data'}) + "\n")
+        dataJson = serial_port_device.serial_query(json.dumps({'cmd': 'info'})+"\n")
         if dataJson:
-            print "Received: " + dataJson
+            print "Info: " + dataJson
             message = json.loads(dataJson)
             print ""
-       # time.sleep(polling_frequency)
+   #     time.sleep(polling_frequency)
 
 
 if __name__ == "__main__":

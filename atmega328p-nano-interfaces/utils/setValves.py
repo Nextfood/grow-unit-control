@@ -34,7 +34,7 @@ class SerialPortDevice:
     def open(self):
         if self._ser:
             self._ser.close()
-        self._ser = serial.Serial(self._serial_port, 57600, timeout=5)
+        self._ser = serial.Serial(self._serial_port, 57600, timeout=1)
 
     def serial_query(self, msg):
         self._ser.write(msg)
@@ -55,13 +55,25 @@ def main():
     time.sleep(2)
 
     print "Connected."
+    a = 100
     while True:
-        dataJson = serial_port_device.serial_query(json.dumps({'cmd': 'data'}) + "\n")
+        print "SENDING CONF"
+        dataJson = serial_port_device.serial_query(json.dumps({'devices': {'pwm': [a,a,a,a,a,a] }}) + "\n")
         if dataJson:
-            print "Received: " + dataJson
+            print "Received1: " + dataJson
             message = json.loads(dataJson)
             print ""
-       # time.sleep(polling_frequency)
+        print "REQ DATA"
+        dataJson2 = serial_port_device.serial_query(json.dumps({'cmd': 'data'}) + "\n")
+        if dataJson2:
+            print "Received2: " + dataJson2
+            message = json.loads(dataJson)
+            print ""
+        if a == 100:
+            a = 0
+        else:
+            a = 100
+        time.sleep(polling_frequency)
 
 
 if __name__ == "__main__":
