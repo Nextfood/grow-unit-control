@@ -59,7 +59,7 @@ def main():
         dataJson = serial_port_device.serial_query(json.dumps({'cmd': 'info'})+"\n")
         if dataJson:
             print "Info: " + dataJson
-            message = json.loads(dataJson)
+#            message = json.loads(dataJson)
             print ""
    #     time.sleep(polling_frequency)
 

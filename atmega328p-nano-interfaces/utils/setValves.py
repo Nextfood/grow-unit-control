@@ -7,7 +7,7 @@ import serial.tools.list_ports
 import time
 
 
-polling_frequency = 2  # seconds
+polling_frequency = 0.5  # seconds
 
 
 class SerialPortDevice:
@@ -55,10 +55,10 @@ def main():
     time.sleep(2)
 
     print "Connected."
-    a = 100
-    while True:
+    pwms_setup_list = [ [100,0,0,0,0,0], [0,100,0,0,0,0], [0,0,100,0,0,0], [0,0,0,100,0,0], [0,0,0,0,100,0], [0,0,0,0,0,100], [0,0,0,0,0,0]]
+    for pwm_setup in pwms_setup_list:
         print "SENDING CONF"
-        dataJson = serial_port_device.serial_query(json.dumps({'devices': {'pwm': [a,a,a,a,a,a] }}) + "\n")
+        dataJson = serial_port_device.serial_query(json.dumps({'devices': {'pwm': pwm_setup }}) + "\n")
         if dataJson:
             print "Received1: " + dataJson
             message = json.loads(dataJson)
@@ -69,10 +69,6 @@ def main():
             print "Received2: " + dataJson2
             message = json.loads(dataJson)
             print ""
-        if a == 100:
-            a = 0
-        else:
-            a = 100
         time.sleep(polling_frequency)
 
 
