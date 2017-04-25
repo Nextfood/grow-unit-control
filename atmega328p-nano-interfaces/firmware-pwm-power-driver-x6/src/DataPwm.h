@@ -16,7 +16,8 @@ public:
         JsonObject& root = jsonBuffer.createObject();
         root[F("id")] = id;
         JsonObject& deviceObj = root.createNestedObject(F("devices"));
-        JsonArray& pwmArray = deviceObj.createNestedArray(F("pwm"));
+        JsonObject& pwmDeviceObj = deviceObj.createNestedObject(F("PWM Power Driver x6"));
+        JsonArray& pwmArray = pwmDeviceObj.createNestedArray(F("pwm"));
         for (int i = 0; i < channels; ++i) {
             pwmArray.add(pwm[i]);
         }

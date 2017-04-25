@@ -10,19 +10,22 @@ public:
     bool relay[1];
 
     bool deserializeJson(String& json) {
-        StaticJsonBuffer<300> jsonBuffer;
+        StaticJsonBuffer<320> jsonBuffer;
         JsonObject& root = jsonBuffer.parseObject(json);
 
         if (root.success()) {
             if (root[F("devices")].is<JsonObject&>()) {
                 JsonObject& devicesRoot = root[F("devices")].as<JsonObject&>();
-                if (devicesRoot[F("relay")].is<JsonArray&>()) {
-                    JsonArray& relays = devicesRoot[F("relay")].as<JsonArray&>();
-                    if (relays.size() == channels) {
-                        for (unsigned int i = 0; i < relays.size(); ++i) {
-                            relays[i] = relays.get<bool>(i);
+                if (devicesRoot[F("Relay x1")].is<JsonObject&>()) {
+                    JsonObject& relayX1Root = devicesRoot[F("Relay x1")].as<JsonObject&>();
+                    if (relayX1Root[F("state")].is<JsonArray&>()) {
+                        JsonArray& relayArray = relayX1Root[F("state")].as<JsonArray&>();
+                        if (relayArray.size() == channels) {
+                            for (unsigned int i = 0; i < relayArray.size(); ++i) {
+                                relay[i] = relayArray.get<bool>(i);
+                            }
+                            return true;
                         }
-                        return true;
                     }
                 }
 

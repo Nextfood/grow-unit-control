@@ -14,7 +14,8 @@ public:
         StaticJsonBuffer<320> jsonBuffer;
         JsonObject& root = jsonBuffer.createObject();
         root[F("id")] = id;
-        root[F("device")] = F("PWM Power Driver x6");
+        JsonArray& devicesRoot = root.createNestedArray("devices");
+        devicesRoot.add(F("PWM Power Driver x6"));
         String jsonStr;
         root.printTo(jsonStr);
         SerialUtils::write(jsonStr);

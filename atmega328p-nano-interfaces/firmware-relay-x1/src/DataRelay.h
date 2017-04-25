@@ -16,7 +16,8 @@ public:
         JsonObject& root = jsonBuffer.createObject();
         root[F("id")] = id;
         JsonObject& deviceObj = root.createNestedObject(F("devices"));
-        JsonArray& array = deviceObj.createNestedArray(F("relay"));
+        JsonObject& relayObj = deviceObj.createNestedObject(F("Relay x1"));
+        JsonArray& array = relayObj.createNestedArray(F("state"));
         for (int i = 0; i < channels; ++i) {
             array.add(relay[i]);
         }
