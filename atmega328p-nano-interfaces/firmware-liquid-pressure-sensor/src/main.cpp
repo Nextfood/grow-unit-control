@@ -1,145 +1,85 @@
-#include <SoftwareSerial.h>
+#include <Arduino.h>
 #include <ArduinoJson.h>
-#include <EEPROM.h>
-#include "Arduino.h"
-#include "DevicePressureSensor1200kPa.h"
-#include "JsonBuilder.h"
+#include "DevicePressureSensor1_2MPa.h"
+#include "Id.h"
+#include "SerialUtils.h"
+
 
 
 #define BAUDRATE 57600
-#define SERIALPORT_TIMEOUT_MS 100
+#define SERIALPORT_TIMEOUT_MS 1000
+#define READ_BUFFER_SIZE 150
 
-#define SIZE_OF_ID 25
-
-char g_id[SIZE_OF_ID];
-String g_info;
-String g_data;
-
-
-#define NUMBER_OF_DEVICES 1
+DataPressureSensor1_2MPa g_data;
+InfoPressureSensor1_2MPa g_info;
+DevicePressureSensor1_2MPa g_device;
+Id g_id;
 
 
 
-Device* deviceArray[NUMBER_OF_DEVICES] = {
-    new DevicePressureSensor1200kPa(7), // Corresponds to pin A7
-    // Add more devices here
-};
-
-static inline void returnSuccess() {
-    JsonBuilder result;
-    result.get()[F("id")] = g_id;
-    result.get()[F("result")] = F("success");
-    result.serialize(Serial);
+#define RETURN_SUCCESS() \
+{ \
+    StaticJsonBuffer<320> jsonBuffer; \
+    JsonObject& root = jsonBuffer.createObject(); \
+    root[F("id")] = g_id.id; \
+    root[F("result")] = F("success"); \
+    String jsonStr; \
+    root.printTo(jsonStr); \
+    SerialUtils::write(jsonStr); \
+    return; \
 }
 
-static inline void returnFailure(String errorMsg) {
-    JsonBuilder result;
-    result.get()[F("id")] = g_id;
-    result.get()["result"] = F("failure");
-    result.get()[F("error_message")] = errorMsg;
-    result.serialize(Serial);
-}
-
-static inline void readIdFromEeprom() {
-    for (int i = 0; i < SIZE_OF_ID; ++i) { // Acquire ID from the EEPROM
-        g_id[i] = EEPROM.read(i);
-        if (g_id[i] == 0) break;
-    }
-    g_id[SIZE_OF_ID - 1] = 0;
-}
-
-static inline void writeIdToEeprom() {
-    for (int i = 0; i < SIZE_OF_ID - 1; ++i) {
-        EEPROM.write(i, g_id[i]);
-    }
-    EEPROM.write(SIZE_OF_ID - 1, 0);
-}
-
-void setId(const String& str) {
-    str.toCharArray(g_id, SIZE_OF_ID);
-    writeIdToEeprom();
-
-    {
-        JsonBuilder s(g_info);
-        s.get()["id"] = str;
-        s.serialize(g_info);
-    }
-    {
-        JsonBuilder s(g_data);
-        s.get()["id"] = str;
-        s.serialize(g_data);
-    }
-
-    returnSuccess();
+#define RETURN_FAILURE(errorMsg) \
+{ \
+    StaticJsonBuffer<320> jsonBuffer; \
+    JsonObject& root = jsonBuffer.createObject(); \
+    root[F("id")] = g_id.id; \
+    root[F("result")] = F("failure"); \
+    root[F("error_message")] = errorMsg; \
+    String jsonStr; \
+    root.printTo(jsonStr); \
+    SerialUtils::write(jsonStr); \
+    return; \
 }
 
 void sendInfo() {
-    for (int i = 0; i < NUMBER_OF_DEVICES; ++i)
-        deviceArray[i]->updateInfo(g_info);
-    Serial.println(g_info);
+    g_info.serializeJson();
 }
 
 void sendData() {
-    Serial.println(g_data);
+    g_data.serializeJson();
 }
 
-void parseJson(String& json) {
-    String cmd;
-    String id;
-    {
-        JsonBuilder s(json);
-        JsonObject& root = s.get();
-        if (!root.success()) // JSON parsing failed
-            return;
-
-        if (root.containsKey("cmd")) {
-            cmd = String(root["cmd"].as<char*>());
-        } else if (root.containsKey("id")) {
-            id = String(root["id"].as<char*>());
-        }
-    } // deallocate json parser
-
-
-    if (cmd.compareTo("info") == 0)
-        return sendInfo();
-
-    if (cmd.compareTo("data") == 0)
-        return sendData();
-
-    if (id.length() != 0) {
-        return setId(id);
+void parseCommand(String& json) {
+    if (g_data.deserializeJson(json)) {
+        g_data.serializeJson();
+        return;
+    } else if (g_info.deserializeJson(json)) {
+        g_info.serializeJson();
+        return;
+    } else if (g_id.deserializeJson(json)) {
+        RETURN_SUCCESS();
     }
 
-    bool configured = false;
-    for (int i = 0; i < NUMBER_OF_DEVICES; ++i) {
-        if (deviceArray[i]->configure(json)) configured = true;
+    ConfigurePressureSensor1_2MPa conf;
+    if (conf.deserializeJson(json)) {
+        g_device.configure(conf);
+        RETURN_SUCCESS();
     }
 
-    if (configured)
-        returnSuccess();
-    else
-        returnFailure(F("Unknown command."));
+    RETURN_FAILURE(F("Unknown Command"));
 }
 
 void setup() {
-    readIdFromEeprom();
+    g_id.readIdFromEeprom();
 
-    if (g_id[0] == 0) {
-        String(F("<unknown location>")).toCharArray(g_id, SIZE_OF_ID);
+    if (g_id.id[0] == 0 || g_id.id[0] == 0xff) {
+        g_id.setIdWithoutEeprom(F("<unknown location>"));
     }
 
-    {
-        JsonBuilder s;
-        s.get()["id"] = g_id;
-        g_info.reserve(300);
-        s.serialize(g_info);
-    }
-    {
-        JsonBuilder s;
-        s.get()["id"] = g_id;
-        g_info.reserve(300);
-        s.serialize(g_data);
-    }
+    g_data.id = g_id.id;
+    g_info.id = g_id.id;
+
 
     Serial.setTimeout(SERIALPORT_TIMEOUT_MS);
     Serial.begin(BAUDRATE);
@@ -147,30 +87,30 @@ void setup() {
         ; // wait for serial port to connect. Needed for native USB port only
     }
 
-
     // Setup devices
-    for (int i = 0; i < NUMBER_OF_DEVICES; ++i) {
-        deviceArray[i]->setup();
-        deviceArray[i]->initiateUpdateData();
-    }
+    SetupPressureSensor1_2MPa s;
+    s.id = g_id.id;
+    g_device.setup(s);
+    g_device.initiateUpdateData();
+}
+
+String readJson() {
+    char buf[READ_BUFFER_SIZE];
+    buf[0] = '\0';
+    Serial.readBytesUntil('\n', buf, READ_BUFFER_SIZE);
+    return String(buf);
 }
 
 void loop() {
 
-    for (int i = 0; i < NUMBER_OF_DEVICES; ++i) {
-        if (deviceArray[i]->isUpdatedDataReady()) {
-            deviceArray[i]->updateData(g_data);
-            deviceArray[i]->initiateUpdateData();
-        }
+    if (g_device.isUpdatedDataReady()) {
+        g_device.updateData(g_data);
+        g_device.initiateUpdateData();
     }
 
-    while (Serial.available() > 0) {
-        String data = Serial.readString();
-        parseJson(data);
+    String data = readJson();
+    if (data.length()) {
+        parseCommand(data);
     }
-
 
 }
-
-
-
