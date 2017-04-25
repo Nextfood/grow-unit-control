@@ -31,7 +31,7 @@ public:
         JsonObject& root = jsonBuffer.parseObject(json);
         if (root.success()) {
             if (root[F("cmd")].is<char*>()) {
-                String cmd = F("relay");
+                String cmd = F("data");
                 return (cmd.compareTo(root[F("cmd")].as<char*>())) == 0;
             }
         }

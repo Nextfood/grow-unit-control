@@ -19,18 +19,19 @@ Id g_id;
 
 #define RETURN_SUCCESS() \
 { \
-    StaticJsonBuffer<300> jsonBuffer; \
+    StaticJsonBuffer<320> jsonBuffer; \
     JsonObject& root = jsonBuffer.createObject(); \
     root[F("id")] = g_id.id; \
     root[F("result")] = F("success"); \
     String jsonStr; \
     root.printTo(jsonStr); \
     SerialUtils::write(jsonStr); \
+    return; \
 }
 
 #define RETURN_FAILURE(errorMsg) \
 { \
-    StaticJsonBuffer<300> jsonBuffer; \
+    StaticJsonBuffer<320> jsonBuffer; \
     JsonObject& root = jsonBuffer.createObject(); \
     root[F("id")] = g_id.id; \
     root[F("result")] = F("failure"); \
@@ -38,6 +39,7 @@ Id g_id;
     String jsonStr; \
     root.printTo(jsonStr); \
     SerialUtils::write(jsonStr); \
+    return; \
 }
 
 void sendInfo() {
@@ -57,24 +59,21 @@ void parseCommand(String& json) {
         return;
     } else if (g_id.deserializeJson(json)) {
         RETURN_SUCCESS();
-        return;
     }
 
     ConfigurePwm conf;
     if (conf.deserializeJson(json)) {
         g_device.configure(conf);
         RETURN_SUCCESS();
-        return;
     }
 
-    Serial.println(json);
     RETURN_FAILURE(F("Unknown Command"));
 }
 
 void setup() {
     g_id.readIdFromEeprom();
 
-    if (g_id.id[0] == 0) {
+    if (g_id.id[0] == 0 || g_id.id[0] == 0xff) {
         g_id.setIdWithoutEeprom(F("<unknown location>"));
     }
 

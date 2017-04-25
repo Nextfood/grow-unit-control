@@ -11,10 +11,14 @@ class Id {
 public:
     char id[25];
 
+    Id() {
+        id[0] = 0;
+    }
+    
     void readIdFromEeprom() {
         for (int i = 0; i < SIZE_OF_ID; ++i) { // Acquire ID from the EEPROM
             id[i] = EEPROM.read(i);
-            if (id[i] == 0) break;
+            if (id[i] == 0 || id[i] == 0xff) break;
         }
         id[SIZE_OF_ID - 1] = 0;
     }

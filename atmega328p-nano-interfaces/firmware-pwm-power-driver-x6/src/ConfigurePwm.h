@@ -4,7 +4,6 @@
 #include "Arduino.h"
 #include <ArduinoJson.h>
 
-
 class ConfigurePwm {
 public:
     static const int channels = 6;
